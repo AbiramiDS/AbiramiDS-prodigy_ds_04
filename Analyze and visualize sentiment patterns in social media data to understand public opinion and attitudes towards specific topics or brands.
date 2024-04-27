@@ -1,0 +1,21 @@
+import pandas as pd
+from textblob import TextBlob
+import matplotlib.pyplot as plt
+
+# Sample data (replace with actual data)
+data = pd.read_csv('social_media_data.csv')
+
+# Perform sentiment analysis
+data['sentiment'] = data['text'].apply(lambda x: TextBlob(x).sentiment.polarity)
+
+# Aggregate sentiment by day
+data['date'] = pd.to_datetime(data['date'])
+daily_sentiment = data.resample('D', on='date').mean()
+
+# Visualize sentiment trends
+plt.figure(figsize=(10, 6))
+plt.plot(daily_sentiment.index, daily_sentiment['sentiment'])
+plt.title('Sentiment Trends over Time')
+plt.xlabel('Date')
+plt.ylabel('Sentiment Score')
+plt.show()
